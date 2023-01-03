@@ -25,6 +25,15 @@ const (
 	HeaderSilk = "\x02#!SILK_V3"
 )
 
+func SetRoot(path string) string {
+	log.Info("切换工作目录到" + path)
+	if err := os.Chdir(path); err != nil {
+		log.Fatal(err)
+	}
+	path, _ = os.Getwd()
+	return path
+}
+
 // PathExists 判断给定path是否存在
 func PathExists(path string) bool {
 	_, err := os.Stat(path)

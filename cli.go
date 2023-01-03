@@ -14,6 +14,18 @@ import (
 	"time"
 )
 
+func SetDataPath(path string) {
+	if global.SetRoot(path) == path {
+		log.Info("成功切换数据目录")
+	} else {
+		log.Fatal("目录切换失败")
+	}
+}
+func GetDataPath(path string) string {
+	path, _ = os.Getwd()
+	return path
+}
+
 func Version() string {
 	return "1.0.0"
 }
