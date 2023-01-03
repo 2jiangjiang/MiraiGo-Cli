@@ -15,15 +15,11 @@ import (
 )
 
 func SetDataPath(path string) {
-	if global.SetRoot(path) == path {
-		log.Info("成功切换数据目录")
-	} else {
-		log.Fatal("目录切换失败")
-	}
+	global.SetRoot(path)
 }
-func GetDataPath(path string) string {
-	path, _ = os.Getwd()
-	return path
+func GetDataPath() string {
+	dir, _ := os.Getwd()
+	return dir
 }
 
 func Version() string {
