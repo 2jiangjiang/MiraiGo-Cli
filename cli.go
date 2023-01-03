@@ -15,25 +15,19 @@ import (
 )
 
 func SetDataPath(path string) {
-	if global.SetRoot(path) == path {
-		log.Info("成功切换数据目录")
-	} else {
-		log.Fatal("目录切换失败")
-	}
+	global.SetRoot(path)
 }
-func GetDataPath(path string) string {
-	path, _ = os.Getwd()
-	return path
+func GetDataPath() string {
+	dir, _ := os.Getwd()
+	return dir
 }
 
 func Version() string {
 	return "1.0.0"
 }
-func Login(account string, password string) bool {
+func Init() {
 	base.Parse()
 	base.Init()
-	base.Account.Uin, _ = strconv.ParseInt(account, 0, 64)
-	base.Account.Password = password
 
 	rotateOptions := []rotatelogs.Option{
 		rotatelogs.WithRotationTime(time.Hour * 24),
@@ -51,7 +45,11 @@ func Login(account string, password string) bool {
 	consoleFormatter := global.LogFormat{EnableColor: base.LogColorful}
 	fileFormatter := global.LogFormat{EnableColor: false}
 	log.AddHook(global.NewLocalHook(w, consoleFormatter, fileFormatter, global.GetLogLevel(base.LogLevel)...))
+}
+func Login(account string, password string) bool {
 
+	base.Account.Uin, _ = strconv.ParseInt(account, 0, 64)
+	base.Account.Password = password
 	if (base.Account.Uin == 0 || (base.Account.Password == "" && !base.Account.Encrypt)) && !global.PathExists("session.token") {
 		log.Warn("账号密码未配置, 将使用二维码登录.")
 		if !base.FastStart {
